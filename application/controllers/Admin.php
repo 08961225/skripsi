@@ -7,6 +7,7 @@ class Admin extends CI_Controller
     {
         parent::__construct();
         $this->load->library('form_validation');
+        $this->load->model('General_model');
     }
 
 
@@ -93,27 +94,53 @@ class Admin extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    public function chanceeditrole($role_iid)
+    public function chanceeditrole()
     {
+        $id = $this->input->post('id');
         $role = $this->input->post('role');
 
+        $where = ['id' => $id];
         $data = [
             'role' => $role
         ];
 
-        $result = $this->db->get_where('user_role', $data);
-        $this->form_validation->set_rules('name', 'Full Name', 'required|trim');
+        // $this->form_validation->set_rules('name', 'Full Name', 'required|trim');
 
-        if ($this->form_validation->run() == false) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('templates/sidebar', $data);
-            $this->load->view('templates/topbar', $data);
-            $this->load->view('admin/editrole', $data);
-            $this->load->view('templates/footer');
+        // if ($this->form_validation->run() == false) {
+        //     $this->load->view('templates/header', $data);
+        //     $this->load->view('templates/sidebar', $data);
+        //     $this->load->view('templates/topbar', $data);
+        //     $this->load->view('admin/editrole', $data);
+        //     $this->load->view('templates/footer');
+        // } else {
+        //     $role = $this->input->post('role');
+        // }
+        $update = $this->General_model->update($data, $where, 'user_role');
+        if($update){
+            $msg =  "update berhasil";
         } else {
-            $role = $this->input->post('role');
+            $msg =  "update gagal";
         }
+            echo '<script>
+            alert("'.$msg.'");
+            window.location = "' . base_url('Admin/role') . '";
+            </script>
+            ';
+        // $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Access Changed!</div>');
+    }
+    public function deleterole($id) {
+        $where = ['id' => $id];
+        $delete = $this->General_model->delete('user_role', $where);
 
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Access Changed!</div>');
+        if($delete){
+            $msg =  "hapus berhasil";
+        } else {
+            $msg =  "hapus gagal";
+        }
+            echo '<script>
+            alert("'.$msg.'");
+            window.location = "' . base_url('Admin/role') . '";
+            </script>
+            ';
     }
 }

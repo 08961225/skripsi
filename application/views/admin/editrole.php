@@ -10,6 +10,7 @@
                 <label for="role" class="col-sm-2 col-form-label">Role</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="role" name="role" value="<?= $role['role']; ?>">
+                    <input type="hidden" class="form-control" id="role" name="id" value="<?= $role['id']; ?>">
                 </div>
             </div>
             <div class="form-group row justify-content-end">
